@@ -1,0 +1,63 @@
+@echo off
+:menu
+cls
+echo ====================================
+echo        User Management Script
+echo ====================================
+echo 1. Add a new user
+echo 2. Remove an existing user
+echo 3. Exit
+echo ====================================
+set /p "choice=Enter your choice (1/2/3): "
+
+if "%choice%"=="1" goto add_user
+if "%choice%"=="2" goto remove_user
+if "%choice%"=="3" goto exit_script
+
+echo Invalid choice, please try again.
+pause
+goto menu
+
+:add_user
+cls
+set /p "username=Enter the username to add: "
+set /p "password=Enter the password for the new user: "
+
+:: Create the user
+net user %username% %password% /add
+if %errorlevel% equ 0 (
+    echo User %username% has been created.
+    :: Optionally add to the Administrators group
+    net localgroup administrators %username% /add
+    if %errorlevel% equ 0 (
+        echo User %username% has been granted administrator privileges.
+    ) else (
+        echo Failed to add user %username% to the Administrators group.
+    )
+) else (
+    echo Failed to create user %username%.
+)
+
+pause
+goto menu
+
+:remove_user
+cls
+set /p "username=Enter the username to remove: "
+
+:: Remove the user
+net user %username% /delete
+if %errorlevel% equ 0 (
+    echo User %username% has been removed.
+) else (
+    echo Failed to remove user %username% or user does not exist.
+)
+
+pause
+goto menu
+
+:exit_script
+cls
+echo Exiting the script. Goodbye!
+pause
+exit
