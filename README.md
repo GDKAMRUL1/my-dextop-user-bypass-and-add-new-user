@@ -1,3 +1,4 @@
 # my-dextop-user-bypass-and-add-new-user
-username=NewUser
+username=NewUser,
+
 password=Password123
